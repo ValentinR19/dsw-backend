@@ -1,0 +1,47 @@
+import { Module } from '@nestjs/common';
+import { RouterModule } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as Joi from 'joi';
+import { ConfigModule } from '@nestjs/config';
+import { routes } from '@shared-module/routes';
+import { AuthModule } from '@auth-module/auth.module';
+import { UsuarioModule } from '@usuario-module/usuario.module';
+
+@Module({
+  imports: [
+    RouterModule.register(routes),
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true,
+      cache: true,
+      validationSchema: Joi.object({
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.number().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        ORIGIN: Joi.string().required(),
+        PORT: Joi.string().required(),
+      }),
+      validationOptions: {
+        abortEarly: true,
+      },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: 'dsw',
+      bigNumberStrings: false,
+      entities: ['dist/**/models/*/*{.entity.ts,.entity.js}'],
+      synchronize: false,
+      extra: {
+        timezone: 'local',
+      },
+    }),
+    AuthModule,
+    UsuarioModule,
+  ],
+})
+export class AppModule {}
