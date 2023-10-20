@@ -4,7 +4,7 @@ import { BaseEntity, Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedCo
 @Index('username_UNIQUE', ['username'], { unique: true })
 @Entity('usuarios', { schema: 'dsw' })
 export class Usuario extends BaseEntity {
-  constructor(username: string, password: string, firstName: string, lastName: string, email: string, idAreaTrabajo: number) {
+  constructor(username: string, password: string, firstName: string, lastName: string, email: string) {
     super();
     this.username = username;
     this.password = password;

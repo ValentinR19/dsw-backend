@@ -24,6 +24,9 @@ export class UsuarioService {
 
   async create(dto: CreateUsuarioDTO): Promise<Usuario> {
     this.logger.log(`Inicia la creacion de un usuario con la siguiente informacion: ${JSON.stringify(dto)}`);
+    // const user = await this.userRepository.findBy({ username: dto.username });
+    // if (user) throw new Error('El usuario ya existe en la BD');
+
     dto.password = await hash(dto.password, 10);
     return this.save(dto);
   }

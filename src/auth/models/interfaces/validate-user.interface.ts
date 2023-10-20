@@ -1,9 +1,5 @@
-export interface IValidateUser {
+export interface IPayload {
   id: number;
   username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  esValido: boolean;
-  mensaje: string;
+  iss: string;
 }
