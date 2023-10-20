@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { routes } from '@shared-module/routes';
 import { AuthModule } from '@auth-module/auth.module';
 import { UsuarioModule } from '@usuario-module/usuario.module';
+import { SharedModule } from '@shared-module/shared.module';
 
 @Module({
   imports: [
@@ -15,10 +16,15 @@ import { UsuarioModule } from '@usuario-module/usuario.module';
       isGlobal: true,
       cache: true,
       validationSchema: Joi.object({
+        TOKEN_EXPIRATION: Joi.string().required(),
+
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
+
+        JWT_SECRET_KEY: Joi.string().required(),
+
         ORIGIN: Joi.string().required(),
         PORT: Joi.string().required(),
       }),
@@ -35,12 +41,13 @@ import { UsuarioModule } from '@usuario-module/usuario.module';
       database: 'dsw',
       bigNumberStrings: false,
       entities: ['dist/**/models/*/*{.entity.ts,.entity.js}'],
-      synchronize: false,
+      synchronize: true,
       extra: {
         timezone: 'local',
       },
     }),
     AuthModule,
+    SharedModule,
     UsuarioModule,
   ],
 })
