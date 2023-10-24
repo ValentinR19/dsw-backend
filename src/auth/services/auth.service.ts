@@ -1,10 +1,10 @@
 import { InvalidCredentialsException } from '@auth-module/exceptions/invalid-credentials.exception';
 import { LoginDTO } from '@auth-module/models/dtos/login.dto';
 import { IAccessToken } from '@auth-module/models/interfaces/access-token.interface';
+import { IValidateLogin } from '@auth-module/models/interfaces/validate-login.interface';
 import { IPayload } from '@auth-module/models/interfaces/validate-user.interface';
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Usuario } from '@usuario-module/models/classes/usuario.entity';
 import { UsuarioService } from '@usuario-module/services/usuario.service';
 import { compare } from 'bcrypt';
 
@@ -29,19 +29,31 @@ export class AuthService {
     return this.signToken(payload);
   }
 
-  private async validateCredentials(credentials: LoginDTO): Promise<Usuario> {
+  private async validateCredentials(credentials: LoginDTO): Promise<any> {
     try {
       const user = await this.userService.findBy({ username: credentials.username });
-      this.logger.log(`Usuario ${user.username.toUpperCase()} encontrado. Se procede a validar su password`);
+      if (user) {
+        this.logger.log(`Usuario ${user.username.toUpperCase()} encontrado. Se procede a validar su password`);
 
-      const isRightPassword = await compare(credentials.password, user.password);
+        const isRightPassword = await compare(credentials.password, user.password);
 
-      if (isRightPassword) {
-        this.logger.log(`La password del usuario ${user.username.toUpperCase()} es correcta, se retorna el objeto usuario`);
-        return user;
+        if (isRightPassword) {
+          this.logger.log(`La password del usuario ${user.username.toUpperCase()} es correcta, se retorna el objeto usuario`);
+          return user;
+        } else {
+          const validateLogin: IValidateLogin = {
+            validate: false,
+            message: 'password incorrecta',
+          };
+          return validateLogin;
+        }
+      } else {
+        const validateLogin: IValidateLogin = {
+          validate: false,
+          message: 'username no encontrado en la base de datos',
+        };
+        return validateLogin;
       }
-
-      throw new Error();
     } catch (error) {
       throw new InvalidCredentialsException(credentials.username);
     }
