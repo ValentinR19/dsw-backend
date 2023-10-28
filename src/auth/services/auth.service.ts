@@ -24,7 +24,6 @@ export class AuthService {
     const userValidate = await this.validateCredentials(credentials);
     if (userValidate.username) {
       const payload: IPayload = {
-        id: userValidate.id,
         username: userValidate.username,
         iss: process.env.ORIGIN,
       };
