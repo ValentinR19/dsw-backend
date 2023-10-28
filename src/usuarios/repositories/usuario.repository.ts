@@ -7,14 +7,13 @@ import { DeepPartial, Repository } from 'typeorm';
 export class UsuarioRepository {
   constructor(@InjectRepository(Usuario) private readonly repository: Repository<Usuario>) {}
 
-  async findById(id: number): Promise<Usuario> {
-    return this.repository.findOneOrFail({ where: { id } });
+  async findByUsername(username: string): Promise<Usuario> {
+    return this.repository.findOneOrFail({ where: { username } });
   }
 
   async findBy(filters: DeepPartial<Usuario>): Promise<Usuario> {
     const query = this.repository.createQueryBuilder('user').where('user.deletedAt IS NULL');
 
-    filters?.id && query.andWhere('user.id = :id', { id: filters.id });
     filters?.username && query.andWhere('user.username = :username', { username: filters.username });
     filters?.firstName && query.andWhere('user.firstName = :firstName', { firstName: filters.firstName });
     filters?.lastName && query.andWhere('user.lastName = :lastName', { lastName: filters.lastName });
@@ -27,7 +26,7 @@ export class UsuarioRepository {
     return this.repository.save(usuario);
   }
 
-  async softDelete(id: number): Promise<void> {
-    await this.repository.softDelete({ id });
+  async softDelete(username: string): Promise<void> {
+    await this.repository.softDelete({ username });
   }
 }

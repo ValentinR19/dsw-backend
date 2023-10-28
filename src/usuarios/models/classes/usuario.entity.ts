@@ -1,5 +1,6 @@
+import { Cliente } from '@cliente-module/models/classes/cliente.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity, Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('username_UNIQUE', ['username'], { unique: true })
 @Entity('usuarios', { schema: 'dsw' })
@@ -12,10 +13,7 @@ export class Usuario extends BaseEntity {
     this.lastName = lastName;
     this.email = email;
   }
-  @PrimaryGeneratedColumn({})
-  id: number;
-
-  @Column('varchar', { name: 'username', unique: true, length: 45 })
+  @PrimaryColumn('varchar', { name: 'username', unique: true, length: 45 })
   username: string;
 
   @Exclude({ toPlainOnly: true })
@@ -36,4 +34,7 @@ export class Usuario extends BaseEntity {
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt: Date | null;
+
+  @OneToOne(() => Cliente, (cliente) => cliente, { cascade: true })
+  cliente: Cliente;
 }
