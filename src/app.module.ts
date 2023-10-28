@@ -7,6 +7,7 @@ import { routes } from '@shared-module/routes';
 import { AuthModule } from '@auth-module/auth.module';
 import { UsuarioModule } from '@usuario-module/usuario.module';
 import { SharedModule } from '@shared-module/shared.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { SharedModule } from '@shared-module/shared.module';
     AuthModule,
     SharedModule,
     UsuarioModule,
+    ClientesModule,
   ],
 })
 export class AppModule {}

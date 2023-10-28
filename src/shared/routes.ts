@@ -1,6 +1,7 @@
 import { Routes } from '@nestjs/core';
 import { UsuarioModule } from '@usuario-module/usuario.module';
 import { AuthModule } from '@auth-module/auth.module';
+import { ClientesModule } from '@cliente-module/clientes.module';
 
 export const routes: Routes = [
   {
@@ -10,5 +11,9 @@ export const routes: Routes = [
   {
     path: 'usuario',
     module: UsuarioModule,
+  },
+  {
+    path: 'cliente',
+    module: ClientesModule,
   },
 ];

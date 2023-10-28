@@ -28,4 +28,7 @@ export class CreateUsuarioDTO extends Usuario {
   @IsEmail(undefined, { message: `El formato del email es incorrecto` })
   @IsNotEmpty({ message: 'El email no puede estar vacio' })
   email: string;
+
+  @IsNotEmpty({ message: 'El documento no puede estar vacío' })
+  documento: string;
 }

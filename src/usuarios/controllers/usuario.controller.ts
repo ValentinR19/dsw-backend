@@ -11,9 +11,9 @@ export class UsuarioController {
   constructor(private readonly userService: UsuarioService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async getById(@Param('id', ParseIntPipe) id: number): Promise<Usuario> {
-    return this.userService.findBy({ id });
+  @Get(':username')
+  async getByUsername(@Param('username') username: string): Promise<Usuario> {
+    return this.userService.findBy({ username });
   }
 
   @Post()
@@ -22,14 +22,14 @@ export class UsuarioController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUsuarioDTO): Promise<Usuario> {
-    return this.userService.update(id, dto);
+  @Put(':username')
+  async update(@Param('username') username: string, @Body() dto: UpdateUsuarioDTO): Promise<Usuario> {
+    return this.userService.update(username, dto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async softDelete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    await this.userService.softDelete(id);
+  @Delete(':username')
+  async softDelete(@Param('username') username: string): Promise<void> {
+    await this.userService.softDelete(username);
   }
 }
