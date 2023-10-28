@@ -7,11 +7,16 @@ import { DeepPartial } from 'typeorm';
 import { CreateUsuarioDTO } from '@usuario-module/models/dtos/create-usuario.dto';
 import { hash } from 'bcrypt';
 import { UpdateUsuarioDTO } from '@usuario-module/models/dtos/update-usuario.dto';
+import { ClienteService } from '@cliente-module/services/clientes.service';
+import { CreateClienteDto } from '@cliente-module/models/dto/create-cliente.dto';
 
 @Injectable()
 export class UsuarioService {
   private logger = new Logger(UsuarioService.name);
-  constructor(private readonly userRepository: UsuarioRepository) {}
+  constructor(
+    private readonly userRepository: UsuarioRepository,
+    private readonly clienteService: ClienteService,
+  ) {}
 
   async findBy(filters: DeepPartial<Usuario>): Promise<Usuario> {
     try {
@@ -24,15 +29,18 @@ export class UsuarioService {
 
   async create(dto: CreateUsuarioDTO): Promise<Usuario> {
     this.logger.log(`Inicia la creacion de un usuario con la siguiente informacion: ${JSON.stringify(dto)}`);
-    // const user = await this.userRepository.findBy({ username: dto.username });
-    // if (user) throw new Error('El usuario ya existe en la BD');
-
     dto.password = await hash(dto.password, 10);
-    return this.save(dto);
+    const dtoCliente = new CreateClienteDto();
+    dtoCliente.documento = dto.documento;
+    dtoCliente.username = dto.username;
+    const user = await this.save(dto);
+    await this.clienteService.create(dtoCliente);
+
+    return user;
   }
 
-  async update(id: number, dto: UpdateUsuarioDTO): Promise<Usuario> {
-    const user = await this.findBy({ id });
+  async update(username: string, dto: UpdateUsuarioDTO): Promise<Usuario> {
+    const user = await this.findBy({ username });
     user.firstName = dto.firstName || user.firstName;
     user.lastName = dto.lastName || user.lastName;
     user.email = dto.email || user.email;
@@ -41,16 +49,16 @@ export class UsuarioService {
       user.password = await hash(dto.password, 10);
     }
 
-    this.logger.log(`Inicia la actualizacion del usuario con ID ${id}. Informacion a actualizar: ${JSON.stringify(dto)}`);
+    this.logger.log(`Inicia la actualizacion del usuario con username ${username}. Informacion a actualizar: ${JSON.stringify(dto)}`);
 
     return this.save(user);
   }
 
-  async softDelete(id: number): Promise<void> {
+  async softDelete(username: string): Promise<void> {
     try {
-      this.logger.log(`Se inicia el softdelete del usuario con ID ${id}`);
-      await this.userRepository.softDelete(id);
-      this.logger.log(`Softdelete del usuario con ID ${id} realizado con exito`);
+      this.logger.log(`Se inicia el softdelete del usuario con username:  ${username}`);
+      await this.userRepository.softDelete(username);
+      this.logger.log(`Softdelete del usuario con username ${username} realizado con exito`);
     } catch (error) {
       throw new UsuarioNotSavedException(error);
     }
@@ -60,7 +68,7 @@ export class UsuarioService {
     try {
       this.logger.log(`Se inicia el guardado de un usuario con la siguiente informacion: ${user}`);
       const usuario = await this.userRepository.create(user);
-      this.logger.log(`El guardado del usuario ha sido exitoso. ID: ${usuario.id}`);
+      this.logger.log(`El guardado del usuario ha sido exitoso. username: ${usuario.username}`);
 
       return usuario;
     } catch (error) {

@@ -5,6 +5,7 @@ import { IValidateLogin } from '@auth-module/models/interfaces/validate-login.in
 import { IPayload } from '@auth-module/models/interfaces/validate-user.interface';
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UsuarioNotFoundException } from '@usuario-module/exceptions/usuario-not-found.exception';
 import { UsuarioService } from '@usuario-module/services/usuario.service';
 import { compare } from 'bcrypt';
 
@@ -20,13 +21,16 @@ export class AuthService {
   async login(credentials: LoginDTO): Promise<IAccessToken> {
     this.logger.log(`Intentando iniciar sesion para el usuario ${credentials.username}`);
 
-    const user = await this.validateCredentials(credentials);
-    const payload: IPayload = {
-      id: user.id,
-      username: user.username,
-      iss: process.env.ORIGIN,
-    };
-    return this.signToken(payload);
+    const userValidate = await this.validateCredentials(credentials);
+    if (userValidate.username) {
+      const payload: IPayload = {
+        username: userValidate.username,
+        iss: process.env.ORIGIN,
+      };
+      return this.signToken(payload);
+    } else {
+      return userValidate;
+    }
   }
 
   private async validateCredentials(credentials: LoginDTO): Promise<any> {
@@ -47,15 +51,15 @@ export class AuthService {
           };
           return validateLogin;
         }
-      } else {
+      }
+    } catch (error) {
+      if (error instanceof UsuarioNotFoundException) {
         const validateLogin: IValidateLogin = {
           validate: false,
           message: 'username no encontrado en la base de datos',
         };
         return validateLogin;
       }
-    } catch (error) {
-      throw new InvalidCredentialsException(credentials.username);
     }
   }
 

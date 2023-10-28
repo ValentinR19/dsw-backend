@@ -7,9 +7,10 @@ import { UsuarioRepository } from '@usuario-module/repositories/usuario.reposito
 import { IsUsernameAvailableConstraint } from '@usuario-module/validators/is-username-validate.validators';
 import { EmailNotExistsConstraint } from '@usuario-module/validators/email-not-exists.validator';
 import { SharedModule } from '@shared-module/shared.module';
+import { ClientesModule } from '@cliente-module/clientes.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario]), SharedModule],
+  imports: [TypeOrmModule.forFeature([Usuario]), SharedModule, ClientesModule],
   controllers: [UsuarioController],
   providers: [UsuarioService, UsuarioRepository, IsUsernameAvailableConstraint, EmailNotExistsConstraint],
   exports: [UsuarioService],
