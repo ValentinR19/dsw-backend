@@ -22,7 +22,8 @@
       "@auth-module/*": ["src/auth/*"],
       "@usuario-module/*": ["src/usuarios/*"],
       "@cliente-module/*": ["src/clientes/*"],
-      "@shared-module/*": ["src/shared/*"]
+      "@shared-module/*": ["src/shared/*"],
+      "@habitacion-module/*": ["src/habitaciones/*"]
     }
   }
 }

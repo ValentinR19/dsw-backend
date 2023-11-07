@@ -1,6 +1,6 @@
 import { Cliente } from '@cliente-module/models/classes/cliente.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity, Column, DeleteDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Index('username_UNIQUE', ['username'], { unique: true })
 @Entity('usuarios', { schema: 'dsw' })
