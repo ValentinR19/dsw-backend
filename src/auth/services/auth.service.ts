@@ -47,7 +47,7 @@ export class AuthService {
         } else {
           const validateLogin: IValidateLogin = {
             validate: false,
-            message: 'password incorrecta',
+            message: 'La contraseña ingresada es invalida',
           };
           return validateLogin;
         }
@@ -56,7 +56,7 @@ export class AuthService {
       if (error instanceof UsuarioNotFoundException) {
         const validateLogin: IValidateLogin = {
           validate: false,
-          message: 'username no encontrado en la base de datos',
+          message: 'El usuario ingresado no existe',
         };
         return validateLogin;
       }
