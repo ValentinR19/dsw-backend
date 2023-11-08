@@ -5,12 +5,17 @@ import { HabitacionRepository } from '@habitacion-module/repositories/habitacion
 import { Injectable, Logger } from '@nestjs/common';
 import { DeepPartial } from 'typeorm';
 import { CreateHabitacionDto } from '@habitacion-module/models/dto/create-habitacion.dto';
+import { IHabitacionFilters } from '@habitacion-module/models/interfaces/habitacion-filters.interface';
 
 @Injectable()
 export class HabitacionService {
   private logger = new Logger(HabitacionService.name);
 
   constructor(private readonly habitacionRepository: HabitacionRepository) {}
+
+  async findAll(filters?: IHabitacionFilters): Promise<Habitacion[]> {
+    return this.habitacionRepository.findAll(filters);
+  }
 
   async create(createHabitacionDto: CreateHabitacionDto): Promise<Habitacion> {
     this.logger.log(`Comienza la creacion de una habitacion con la siguiente informacion: ${JSON.stringify(createHabitacionDto)}`);

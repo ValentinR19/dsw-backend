@@ -7,7 +7,7 @@ export class Cliente {
   @PrimaryColumn('varchar', { name: 'documento', unique: true, length: 45, nullable: false })
   documento: string;
 
-  @Column('int', { name: 'username', nullable: false })
+  @Column('string', { name: 'username', nullable: false })
   username: string;
 
   @Column('varchar', { name: 'telefono', nullable: true })
