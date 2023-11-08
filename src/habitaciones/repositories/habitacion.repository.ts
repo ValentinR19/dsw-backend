@@ -10,16 +10,21 @@ export class HabitacionRepository {
   constructor(@InjectRepository(Habitacion) private readonly repository: Repository<Habitacion>) {}
 
   async findAll(filters?: IHabitacionFilters): Promise<Habitacion[]> {
-    const query = this.repository.createQueryBuilder('habitacion').where('habitacion.estado = :estado', { estado: true }).andWhere('habitacion.deletedAt IS NULL');
-    query.leftJoin('habitacion.tipoHabitacion', 'tipoHabitacion');
-    query.leftJoinAndSelect('habitacion.reserva', 'reserva');
+    const query = this.repository.createQueryBuilder('habitacion').andWhere('habitacion.deletedAt IS NULL');
+    query.leftJoin('habitacion.reserva', 'reserva');
+    query.leftJoinAndSelect('habitacion.tipoHabitacion', 'tipoHabitacion');
 
     filters?.capacidadPersonas && query.andWhere('habitacion.capacidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
-    filters?.startDate && query.andWhere('DATE(reserva.fechaEntrada) <= :startDate', { startDate: dayjs(filters.startDate).format('YYYY-MM-DD') });
-    filters?.endDate && query.andWhere('DATE(reserva.fechaSalida) >= :endDate', { endDate: dayjs(filters.endDate).format('YYYY-MM-DD') });
-
     filters?.idTipoHabitacion && query.andWhere('habitacion.idTipoHabitacion = :idTipoHabitacion', { idTipoHabitacion: filters.idTipoHabitacion });
 
+    filters?.fechaEntrada &&
+      filters.fechaSalida &&
+      query.andWhere(
+        ':fechaEntrada NOT BETWEEN DATE(reserva.fechaEntrada) AND DATE(reserva.fechaSalida)' +
+          ':fechaSalida NOT BETWEEN DATE(reserva.fechaEntrada) AND DATE(reserva.fechaSalida)' +
+          'reserva.id IS NULL',
+        { fechaEntrada: dayjs(filters.fechaEntrada).format('YYYY-MM-DD'), fechaSalida: dayjs(filters.fechaSalida).format('YYYY-MM-DD') },
+      );
     return query.getMany();
   }
 
