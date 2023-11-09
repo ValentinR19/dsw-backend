@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { HabitacionService } from '@habitacion-module/services/habitacion.service';
 import { CreateHabitacionDto } from '@habitacion-module/models/dto/create-habitacion.dto';
 import { Habitacion } from '@habitacion-module/models/classes/habitacion.entity';
@@ -13,8 +13,8 @@ export class HabitacionesController {
     return this.habitacionService.findById(id);
   }
 
-  @Get()
-  async getAll(@Query() filters?: IHabitacionFilters): Promise<Habitacion[]> {
+  @Post('lista')
+  async getAll(@Body() filters?: IHabitacionFilters): Promise<Habitacion[]> {
     return this.habitacionService.findAll(filters);
   }
 
