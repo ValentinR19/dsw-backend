@@ -20,13 +20,13 @@ export class Cliente {
   @Column('varchar', { name: 'genero', length: 100, nullable: true })
   genero: string;
 
-  @Column('date', { name: 'fecha_nacimiento', nullable: false })
+  @Column('date', { name: 'fecha_nacimiento', nullable: true })
   fechaNacimiento: string;
 
-  @Column('varchar', { name: 'localidad', length: 100, nullable: false })
+  @Column('varchar', { name: 'localidad', length: 100, nullable: true })
   localidad: string;
 
-  @Column('varchar', { name: 'direccion', length: 100, nullable: false })
+  @Column('varchar', { name: 'direccion', length: 100, nullable: true })
   direccion: String;
 
   @Column('int', { name: 'piso', nullable: true })
