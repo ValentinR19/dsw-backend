@@ -2,7 +2,6 @@ import { Habitacion } from '@habitacion-module/models/classes/habitacion.entity'
 import { IHabitacionFilters } from '@habitacion-module/models/interfaces/habitacion-filters.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class HabitacionRepository {
       .leftJoinAndSelect('habitacion.tipoHabitacion', 'tipoHabitacion')
       .andWhere('habitacion.deletedAt IS NULL');
 
-    filters?.capacidadPersonas && query.andWhere('habitacion.capacidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
+    filters?.capacidadPersonas && query.andWhere('habitacion.cantidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
 
     filters?.idTipoHabitacion && query.andWhere('habitacion.idTipoHabitacion = :idTipoHabitacion', { idTipoHabitacion: filters.idTipoHabitacion });
 
