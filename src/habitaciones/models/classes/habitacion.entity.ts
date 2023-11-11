@@ -1,5 +1,6 @@
 import { TipoHabitacion } from '@habitacion-module/models/classes/tipo-habitacion.entity';
-import { BaseEntity, Column, DeleteDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Reserva } from 'src/reservas/models/classes/reserva.entity';
+import { BaseEntity, Column, DeleteDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('habitaciones', { schema: 'dsw' })
 export class Habitacion extends BaseEntity {
@@ -29,4 +30,7 @@ export class Habitacion extends BaseEntity {
 
   @ManyToOne(() => TipoHabitacion, (tipoHabitacion) => tipoHabitacion)
   tipoHabitacion: TipoHabitacion;
+
+  @OneToMany(() => Reserva, (reserva) => reserva.habitacion)
+  reservas: Reserva[];
 }
