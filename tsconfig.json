@@ -23,7 +23,8 @@
       "@usuario-module/*": ["src/usuarios/*"],
       "@cliente-module/*": ["src/clientes/*"],
       "@shared-module/*": ["src/shared/*"],
-      "@habitacion-module/*": ["src/habitaciones/*"]
+      "@habitacion-module/*": ["src/habitaciones/*"],
+      "@reserva-module/*": ["src/reservas/*"]
     }
   }
 }

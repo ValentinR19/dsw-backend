@@ -31,6 +31,6 @@ export class Habitacion extends BaseEntity {
   @ManyToOne(() => TipoHabitacion, (tipoHabitacion) => tipoHabitacion)
   tipoHabitacion: TipoHabitacion;
 
-  @OneToMany(() => Reserva, (reserva) => reserva)
+  @OneToMany(() => Reserva, (reserva) => reserva.habitacion)
   reservas: Reserva[];
 }

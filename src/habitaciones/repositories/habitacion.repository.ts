@@ -2,7 +2,7 @@ import { Habitacion } from '@habitacion-module/models/classes/habitacion.entity'
 import { IHabitacionFilters } from '@habitacion-module/models/interfaces/habitacion-filters.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
@@ -10,21 +10,32 @@ export class HabitacionRepository {
   constructor(@InjectRepository(Habitacion) private readonly repository: Repository<Habitacion>) {}
 
   async findAll(filters?: IHabitacionFilters): Promise<Habitacion[]> {
-    const query = this.repository.createQueryBuilder('habitacion').andWhere('habitacion.deletedAt IS NULL');
-    query.leftJoin('habitacion.reserva', 'reserva');
-    query.leftJoinAndSelect('habitacion.tipoHabitacion', 'tipoHabitacion');
+    const query = this.repository
+      .createQueryBuilder('habitacion')
+      .leftJoinAndSelect('habitacion.reservas', 'reserva')
+      .leftJoinAndSelect('habitacion.tipoHabitacion', 'tipoHabitacion')
+      .andWhere('habitacion.deletedAt IS NULL');
 
     filters?.capacidadPersonas && query.andWhere('habitacion.capacidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
+
     filters?.idTipoHabitacion && query.andWhere('habitacion.idTipoHabitacion = :idTipoHabitacion', { idTipoHabitacion: filters.idTipoHabitacion });
 
-    filters?.fechaEntrada &&
-      filters.fechaSalida &&
-      query.andWhere(
-        ':fechaEntrada NOT BETWEEN DATE(reserva.fechaEntrada) AND DATE(reserva.fechaSalida)' +
-          ':fechaSalida NOT BETWEEN DATE(reserva.fechaEntrada) AND DATE(reserva.fechaSalida)' +
-          'reserva.id IS NULL',
-        { fechaEntrada: dayjs(filters.fechaEntrada).format('YYYY-MM-DD'), fechaSalida: dayjs(filters.fechaSalida).format('YYYY-MM-DD') },
-      );
+    if (filters?.fechaEntrada && filters.fechaSalida) {
+      const subquery = this.repository
+        .createQueryBuilder('subquery')
+        .select('reserva.idHabitacion')
+        .from('reservas', 'reserva')
+        .where(':fechaSalida >= reserva.fechaEntrada AND :fechaEntrada <= reserva.fechaSalida', {
+          fechaEntrada: filters.fechaEntrada,
+          fechaSalida: filters.fechaSalida,
+        });
+
+      query.andWhere(`habitacion.id NOT IN (${subquery.getQuery()})`, {
+        fechaEntrada: filters.fechaEntrada,
+        fechaSalida: filters.fechaSalida,
+      });
+    }
+
     return query.getMany();
   }
 
