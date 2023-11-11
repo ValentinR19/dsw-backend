@@ -1,5 +1,4 @@
 import { Usuario } from '@usuario-module/models/classes/usuario.entity';
-import { StringMap } from 'ts-jest';
 import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Index('documento_UNIQUE', ['documento'], { unique: true })
