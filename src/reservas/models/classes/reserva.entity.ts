@@ -1,6 +1,6 @@
 import { Cliente } from '@cliente-module/models/classes/cliente.entity';
 import { Habitacion } from '@habitacion-module/models/classes/habitacion.entity';
-import { BaseEntity, Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('reservas', { schema: 'dsw' })
 export class Reserva extends BaseEntity {
@@ -10,8 +10,8 @@ export class Reserva extends BaseEntity {
   @Column('int', { name: 'id_habitacion' })
   idHabitacion: number;
 
-  @Column('int', { name: 'documento_cliente' })
-  documentoCliente: number;
+  @Column('varchar', { name: 'documento_cliente', nullable: false })
+  documentoCliente: string;
 
   @Column('date', { name: 'fecha_entrada' })
   fechaEntrada: string;
@@ -22,8 +22,8 @@ export class Reserva extends BaseEntity {
   @Column('boolean', { name: 'pagada' })
   pagada: boolean;
 
-  @Column('int', { name: 'capacidad_personas' })
-  capacidadPersonas: number;
+  @Column('int', { name: 'cantidad_personas' })
+  cantidadPersonas: number;
 
   @Column('float', { name: 'precio_final' })
   precioFinal: number;

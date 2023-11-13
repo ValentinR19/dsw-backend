@@ -2,7 +2,6 @@ import { Habitacion } from '@habitacion-module/models/classes/habitacion.entity'
 import { IHabitacionFilters } from '@habitacion-module/models/interfaces/habitacion-filters.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
