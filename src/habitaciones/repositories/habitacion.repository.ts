@@ -15,7 +15,7 @@ export class HabitacionRepository {
       .leftJoinAndSelect('habitacion.tipoHabitacion', 'tipoHabitacion')
       .andWhere('habitacion.deletedAt IS NULL');
 
-    filters?.capacidadPersonas && query.andWhere('habitacion.cantidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
+    filters?.capacidadPersonas && query.andWhere('habitacion.capacidadPersonas >= :capacidadPersonas', { capacidadPersonas: filters.capacidadPersonas });
 
     filters?.idTipoHabitacion && query.andWhere('habitacion.idTipoHabitacion = :idTipoHabitacion', { idTipoHabitacion: filters.idTipoHabitacion });
 
