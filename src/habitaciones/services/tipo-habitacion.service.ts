@@ -1,5 +1,6 @@
 import { TipoHabitacionNotFoundException } from '@habitacion-module/exceptions/tipo-habitacion-not-found.exception';
 import { TipoHabitacionNotSavedException } from '@habitacion-module/exceptions/tipo-habitacion-not-saved.exception';
+import { TiposHabitacionNotFoundException } from '@habitacion-module/exceptions/tipos-habitacion-not-found.exception';
 import { TipoHabitacion } from '@habitacion-module/models/classes/tipo-habitacion.entity';
 import { CreateTipoHabitacionDto } from '@habitacion-module/models/dto/create-tipo-habitacion.dto';
 import { TipoHabitacionRepository } from '@habitacion-module/repositories/tipo-habitacion.repository';
@@ -36,6 +37,17 @@ export class TipoHabitacionService {
       return habitacion;
     } catch (error) {
       throw new TipoHabitacionNotFoundException();
+    }
+  }
+
+  async getAll() {
+    try {
+      this.logger.log(`Comienza la busqueda el GetAll de tipos de habitaciones`);
+      const tipoHabitaciones = await this.tipohabitacionRepository.getAll();
+      this.logger.log(`Se completa el getAll de tipos de habitaciones`);
+      return tipoHabitaciones;
+    } catch (error) {
+      throw new TiposHabitacionNotFoundException();
     }
   }
 }

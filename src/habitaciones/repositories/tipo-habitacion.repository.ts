@@ -5,7 +5,12 @@ import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class TipoHabitacionRepository {
-  constructor(@InjectRepository(TipoHabitacion) private readonly repository: Repository<TipoHabitacion>) {}
+  constructor(@InjectRepository(TipoHabitacion) private readonly repository: Repository<TipoHabitacion>,
+  ) {}
+
+  async getAll(): Promise<TipoHabitacion[]> {
+    return this.repository.find();
+  }
 
   async findById(id: number): Promise<TipoHabitacion> {
     return this.repository.findOneOrFail({ where: { id } });
