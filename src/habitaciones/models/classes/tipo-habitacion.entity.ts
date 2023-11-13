@@ -15,7 +15,7 @@ export class TipoHabitacion extends BaseEntity {
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt: Date | null;
 
-  @OneToMany(() => Habitacion, (habitacion) => habitacion, { nullable: true })
+  @OneToMany(() => Habitacion, (habitacion) => habitacion)
   @JoinColumn({ name: 'id', referencedColumnName: 'id' })
   habitaciones: Habitacion[];
 }

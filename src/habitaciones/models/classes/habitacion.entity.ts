@@ -1,6 +1,6 @@
 import { TipoHabitacion } from '@habitacion-module/models/classes/tipo-habitacion.entity';
 import { Reserva } from 'src/reservas/models/classes/reserva.entity';
-import { BaseEntity, Column, DeleteDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('habitaciones', { schema: 'dsw' })
 export class Habitacion extends BaseEntity {
@@ -28,7 +28,8 @@ export class Habitacion extends BaseEntity {
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt: Date | null;
 
-  @ManyToOne(() => TipoHabitacion, (tipoHabitacion) => tipoHabitacion)
+  @ManyToOne(() => TipoHabitacion, (tipoHabitacion) => tipoHabitacion.habitaciones)
+  @JoinColumn({ name: 'id_tipo_habitacion', referencedColumnName: 'id' })
   tipoHabitacion: TipoHabitacion;
 
   @OneToMany(() => Reserva, (reserva) => reserva.habitacion)
