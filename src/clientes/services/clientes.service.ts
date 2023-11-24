@@ -3,7 +3,7 @@ import { CreateClienteDto } from '@cliente-module/models/dto/create-cliente.dto'
 import { UpdateClienteDto } from '@cliente-module/models/dto/update-cliente.dto';
 import { ClienteRepository } from '@cliente-module/repositories/cliente.repository';
 import { Cliente } from '@cliente-module/models/classes/cliente.entity';
-import { DeepPartial, DeleteDateColumn } from 'typeorm';
+import { DeepPartial } from 'typeorm';
 import { ClienteNotSavedException } from '@cliente-module/exceptions/cliente-not-saved.exception';
 import { ClienteNotFoundException } from '@cliente-module/exceptions/cliente-not-found.exception';
 
