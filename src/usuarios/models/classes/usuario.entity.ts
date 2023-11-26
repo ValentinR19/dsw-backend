@@ -1,20 +1,25 @@
 import { Cliente } from '@cliente-module/models/classes/cliente.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity, Column, DeleteDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Index('username_UNIQUE', ['username'], { unique: true })
 @Entity('usuarios', { schema: 'dsw' })
 export class Usuario extends BaseEntity {
-  constructor(username: string, password: string, firstName: string, lastName: string, email: string) {
+  constructor(username: string, password: string, firstName: string, lastName: string, email: string, documento: string) {
     super();
     this.username = username;
     this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
+    this.documento = documento;
   }
+
   @PrimaryColumn('varchar', { name: 'username', unique: true, length: 45 })
   username: string;
+
+  @Column('varchar', { name: 'documento', length: 30 })
+  documento: string;
 
   @Exclude({ toPlainOnly: true })
   @Column('varchar', { name: 'password', length: 300 })

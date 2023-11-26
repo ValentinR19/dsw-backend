@@ -43,6 +43,19 @@ export class ClienteService {
       throw new ClienteNotFoundException(error);
     }
   }
+
+  async findByUsuario(documento: string) {
+    try {
+      this.logger.log(`Se inicia la busqueda del cliente con documento: ${documento}`);
+      const cliente = await this.clienteRepository.findByDocumento(documento);
+      this.logger.log(`Se completa la busqueda del cliente con documento: ${documento}`);
+
+      return cliente;
+    } catch (error) {
+      throw new ClienteNotFoundException(error);
+    }
+  }
+
   private async save(cliente: DeepPartial<Cliente>): Promise<Cliente> {
     try {
       this.logger.log(`Se inicia el guardado de un cliente con la siguiente informacion: ${cliente}`);

@@ -42,7 +42,7 @@ export class AuthService {
         const isRightPassword = await compare(credentials.password, user.password);
 
         if (isRightPassword) {
-          this.logger.log(`La password del usuario ${user.username.toUpperCase()} es correcta, se retorna el objeto usuario`);
+          this.logger.log(`La contraseña del usuario ${user.username.toUpperCase()} es correcta, se retorna el objeto usuario`);
           return user;
         } else {
           const validateLogin: IValidateLogin = {

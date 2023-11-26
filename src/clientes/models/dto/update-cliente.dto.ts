@@ -1,16 +1,4 @@
-import { Cliente } from '@cliente-module/models/classes/cliente.entity';
-import { IsOptional } from 'class-validator';
+import { CreateClienteDto } from '@cliente-module/models/dto/create-cliente.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateClienteDto extends Cliente {
-  @IsOptional()
-  domicilio: string;
-
-  @IsOptional()
-  genero: string;
-
-  @IsOptional()
-  nacionalidad: string;
-
-  @IsOptional()
-  telefono: string;
-}
+export class UpdateClienteDto extends PartialType(CreateClienteDto) {}
