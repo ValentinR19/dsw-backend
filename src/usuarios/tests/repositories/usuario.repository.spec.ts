@@ -23,7 +23,7 @@ describe('UsuarioRepository', () => {
     internalRepository = module.get<Repository<Usuario>>(getRepositoryToken(Usuario));
   });
 
-  it('should be defined', () => {
+  it('Deberia estar definido', () => {
     expect(repository).toBeDefined();
     expect(internalRepository).toBeDefined();
   });

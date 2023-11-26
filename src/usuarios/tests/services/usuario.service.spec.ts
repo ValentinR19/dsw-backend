@@ -9,6 +9,7 @@ import { Usuario } from '@usuario-module/models/classes/usuario.entity';
 import { UsuarioRepository } from '@usuario-module/repositories/usuario.repository';
 import { UsuarioService } from '@usuario-module/services/usuario.service';
 import { mockCreateUsuarioDTO, mockUsuario } from '@usuario-module/tests/mocks/usuario.mock';
+import e from 'express';
 import { DeepPartial } from 'typeorm';
 
 describe('UsuarioService', () => {
@@ -36,7 +37,7 @@ describe('UsuarioService', () => {
     clienteService = module.get<ClienteService>(ClienteService);
   });
 
-  it('should be defined', () => {
+  it('Deberia estar definido', () => {
     expect(repository).toBeDefined();
     expect(service).toBeDefined();
     expect(clienteService).toBeDefined();
@@ -105,7 +106,7 @@ describe('UsuarioService', () => {
       expect(repository.softDelete).toBeCalledWith(username);
     });
 
-    it(`Deberia lanzar un error generico al intentar borrar el usuario`, async () => {
+    it(`Deberia lanzar un error de tipo UsuarioNotSavedException al intentar borrar el usuario`, async () => {
       const username = faker.string.alpha();
 
       jest.spyOn(repository, 'softDelete').mockRejectedValueOnce(new Error('test-error'));
@@ -116,21 +117,52 @@ describe('UsuarioService', () => {
   });
 
   describe(`update`, () => {
-    it(`Debería retornar un usuario editado`, async () => {
-      const usuario = mockCreateUsuarioDTO();
-      usuario.username = faker.string.alpha();
+    it(`Debería retornar un usuario editado si se le provee un username`, async () => {
+      const updateUsuario = mockUpdateUsuarioDTO();
 
-      jest.spyOn(service, 'findBy');
+      const username = faker.string.alpha();
+      const usuario = mockUsuario();
+      usuario.username = username;
+      usuario.firstName = updateUsuario.firstName;
+      usuario.lastName = updateUsuario.lastName;
+      usuario.email = updateUsuario.email;
+
       jest.spyOn(repository, 'create').mockResolvedValueOnce(usuario);
-
-      const response = await service.update(usuario.username, usuario);
+      jest.spyOn(service, 'findBy');
+      const response = await service.update(username, usuario);
 
       expect(response).toBeDefined();
       expect(response).toBeInstanceOf(Usuario);
-      expect(response.username).toEqual(usuario.username);
+      expect(response.username).toBeDefined();
+      expect(response.username).toEqual(username);
+      expect(response.firstName).toEqual(usuario.firstName);
+      expect(response.lastName).toEqual(usuario.lastName);
+      expect(response.email).toEqual(usuario.email);
 
-      expect(repository.create).toBeCalledWith(usuario);
-      expect(service.findBy).toBeCalledWith(usuario.username);
+      expect(repository.create).toBeCalled();
+      expect(service.findBy).toBeCalledWith({ username });
+    });
+
+    it(`Debería lanzar un error de tipo UsuarioNotSavedException si ocurre un error durante la ejecucion del metodo`, async () => {
+      const username = faker.string.alpha();
+      const updateUsuario = mockUpdateUsuarioDTO();
+
+      jest.spyOn(repository, 'create').mockRejectedValueOnce(new Error());
+
+      await expect(service.update(username, updateUsuario)).rejects.toThrowError(UsuarioNotSavedException);
+
+      expect(repository.create).toBeCalled();
+    });
+
+    it(`Debería lanzar un error de tipo UsuarioNotFoundException si no encuentra el usuario`, async () => {
+      const username = faker.string.alpha();
+      const dto = mockUpdateUsuarioDTO();
+
+      jest.spyOn(repository, 'findBy').mockRejectedValueOnce(new Error());
+
+      await expect(service.update(username, dto)).rejects.toThrowError(UsuarioNotFoundException);
+
+      expect(repository.findBy).toBeCalledWith({ username });
     });
   });
 });
