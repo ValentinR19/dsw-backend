@@ -13,6 +13,7 @@ import { CreateClienteDto } from '@cliente-module/models/dto/create-cliente.dto'
 @Injectable()
 export class UsuarioService {
   private logger = new Logger(UsuarioService.name);
+
   constructor(
     private readonly userRepository: UsuarioRepository,
     private readonly clienteService: ClienteService,

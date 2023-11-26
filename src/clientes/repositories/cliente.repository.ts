@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 
 export class ClienteRepository {
-
   constructor(@InjectRepository(Cliente) private readonly repository: Repository<Cliente>) {}
 
   async create(usuario: DeepPartial<Cliente>): Promise<Cliente> {
