@@ -13,6 +13,7 @@ import { CreateClienteDto } from '@cliente-module/models/dto/create-cliente.dto'
 @Injectable()
 export class UsuarioService {
   private logger = new Logger(UsuarioService.name);
+
   constructor(
     private readonly userRepository: UsuarioRepository,
     private readonly clienteService: ClienteService,
@@ -50,15 +51,14 @@ export class UsuarioService {
     }
 
     this.logger.log(`Inicia la actualizacion del usuario con username ${username}. Informacion a actualizar: ${JSON.stringify(dto)}`);
-
     return this.save(user);
   }
 
   async softDelete(username: string): Promise<void> {
     try {
-      this.logger.log(`Se inicia el softdelete del usuario con username:  ${username}`);
+      this.logger.log(`Se inicia el softdelete del usuario con username:  ${JSON.stringify(username)}`);
       await this.userRepository.softDelete(username);
-      this.logger.log(`Softdelete del usuario con username ${username} realizado con exito`);
+      this.logger.log(`Softdelete del usuario con username ${JSON.stringify(username)} realizado con exito`);
     } catch (error) {
       throw new UsuarioNotSavedException(error);
     }
@@ -66,7 +66,7 @@ export class UsuarioService {
 
   private async save(user: DeepPartial<Usuario>): Promise<Usuario> {
     try {
-      this.logger.log(`Se inicia el guardado de un usuario con la siguiente informacion: ${user}`);
+      this.logger.log(`Se inicia el guardado de un usuario con la siguiente informacion: ${JSON.stringify(user)}`);
       const usuario = await this.userRepository.create(user);
       this.logger.log(`El guardado del usuario ha sido exitoso. username: ${usuario.username}`);
 

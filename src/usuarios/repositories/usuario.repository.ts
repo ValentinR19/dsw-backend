@@ -5,7 +5,10 @@ import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class UsuarioRepository {
-  constructor(@InjectRepository(Usuario) private readonly repository: Repository<Usuario>) {}
+  constructor(
+    @InjectRepository(Usuario)
+    private readonly repository: Repository<Usuario>,
+  ) {}
 
   async findByUsername(username: string): Promise<Usuario> {
     return this.repository.findOneOrFail({ where: { username } });

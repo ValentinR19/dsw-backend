@@ -1,13 +1,12 @@
 import { Cliente } from '@cliente-module/models/classes/cliente.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity, Column, DeleteDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Index('username_UNIQUE', ['username'], { unique: true })
 @Entity('usuarios', { schema: 'dsw' })
 export class Usuario extends BaseEntity {
-  constructor(username: string, password: string, firstName: string, lastName: string, email: string, documento: string) {
+  constructor(password: string, firstName: string, lastName: string, email: string, documento: string) {
     super();
-    this.username = username;
     this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
