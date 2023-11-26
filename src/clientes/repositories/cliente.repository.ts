@@ -9,7 +9,7 @@ export class ClienteRepository {
     return this.repository.save(usuario);
   }
 
-  async findByDocumento(documento: string) {
+  async findByDocumento(documento: string): Promise<Cliente> {
     return this.repository.findOneOrFail({ where: { documento } });
   }
 }

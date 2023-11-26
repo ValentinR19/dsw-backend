@@ -8,6 +8,8 @@ import { AuthModule } from '@auth-module/auth.module';
 import { UsuarioModule } from '@usuario-module/usuario.module';
 import { SharedModule } from '@shared-module/shared.module';
 import { ClientesModule } from './clientes/clientes.module';
+import { HabitacionesModule } from './habitaciones/habitaciones.module';
+import { ReservaModule } from '@reserva-module/reservas.module';
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { ClientesModule } from './clientes/clientes.module';
     SharedModule,
     UsuarioModule,
     ClientesModule,
+    HabitacionesModule,
+    ReservaModule,
   ],
 })
 export class AppModule {}

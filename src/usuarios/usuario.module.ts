@@ -1,3 +1,4 @@
+import { ClienteService } from '@cliente-module/services/clientes.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from '@usuario-module/models/classes/usuario.entity';
@@ -12,7 +13,7 @@ import { ClientesModule } from '@cliente-module/clientes.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Usuario]), SharedModule, ClientesModule],
   controllers: [UsuarioController],
-  providers: [UsuarioService, UsuarioRepository, IsUsernameAvailableConstraint, EmailNotExistsConstraint],
+  providers: [ClienteService, UsuarioService, UsuarioRepository, IsUsernameAvailableConstraint, EmailNotExistsConstraint],
   exports: [UsuarioService],
 })
 export class UsuarioModule {}
