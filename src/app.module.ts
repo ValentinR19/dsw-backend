@@ -47,6 +47,7 @@ import { ReservaModule } from '@reserva-module/reservas.module';
       synchronize: true,
       extra: {
         timezone: 'local',
+        insecureAuth: true,
       },
     }),
     AuthModule,
