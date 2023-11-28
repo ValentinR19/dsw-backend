@@ -36,13 +36,12 @@ import { ReservaModule } from '@reserva-module/reservas.module';
       },
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'dsw',
-      bigNumberStrings: false,
       entities: ['dist/**/models/*/*{.entity.ts,.entity.js}'],
       synchronize: true,
       extra: {
